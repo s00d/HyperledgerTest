@@ -1,0 +1,42 @@
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+
+rule NetworkUserSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "com.s00d.coin.network.User"
+    operation: READ
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule SeeYourUser {
+  description: "See only your user"
+  participant(p): "com.s00d.coin.network.User"
+  operation: ALL
+  resource(r): "com.s00d.coin.network.User"
+  condition: (p.getIdentifier() == r.getIdentifier())
+  action: ALLOW
+}
+
+rule SeeYourVault {
+  description: "See only your vault"
+  participant(p): "com.s00d.coin.network.User"
+  operation: ALL
+  resource(r): "com.s00d.coin.network.Vault"
+  condition: (p.getIdentifier() == r.owner.getIdentifier())
+  action: ALLOW
+}
